@@ -73,6 +73,9 @@ class _GameWidgetState extends State<GameWidget> {
                                   : "Aguarde sua vez",
                               style: TextStyle36,
                             ),
+                            onLongPress: () {
+                              _sendMessage();
+                            },
                           ),
                     GridView.count(
                       crossAxisCount: 3,
@@ -174,4 +177,27 @@ class _GameWidgetState extends State<GameWidget> {
 
   void _showSendingAction() {}
   void checkWinner() {}
+  void _sendMessage() async {
+    TextEditingController controller = TextEditingController();
+    return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Digite a mensagem para enviar"),
+            content: TextField(controller: controller),
+            actions: [
+              ElevatedButton(
+                  child: const Text("Enviar"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _sendAction('chat', {
+                      'message':
+                          '${creator!.creator ? "p1" : "p2"}|${controller.text}'
+                    });
+                  }),
+            ],
+          );
+        });
+  }
 }
